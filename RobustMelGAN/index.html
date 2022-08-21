@@ -3,7 +3,7 @@
 
 
 <!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>AdaVITS: Tiny VITS for Low Computing Resource Speaker Adaptation</title>
+<title>Robust MelGAN: A robust universal neural vocoder for high-fidelity TTS</title>
 <meta name="generator" content="Jekyll v3.9.0">
 <meta property="og:title" content="TODO: title">
 <meta property="og:locale" content="en_US">
@@ -25,520 +25,573 @@
     </section>
 
 <section class="main-content">
-      <h1 id=""><center>AdaVITS: Tiny VITS for Low Computing Resource Speaker Adaptation</center></h1>
+      <h1 id=""><center>Robust MelGAN: A robust universal neural vocoder for high-fidelity TTS</center></h1>
 
 
 <h2>0. Contents</h2>
 <ol>
   <li><a href="#abstract">Abstract</a></li>
-  <li><a href="#Comparison">Demos on VCTK</a></li>
-  <li><a href="#Comparison_chinese">Demos on Chinese</a></li>
+  <li><a href="#Comparison_1">Demos on Spon data (TTS)</a></li>
+  <li><a href="#Comparison_2">Demos on speaker adaptation (TTS)</a></li>
+  <li><a href="#Comparison_3">Demos on Hifi data (TTS)</a></li>
+  <li><a href="#Comparison_4">Demos on unseen speakers (copy synthesis)</a></li>
+  <li><a href="#Comparison_5">Demos on seen speakers (copy synthesis)</a></li>
 </ol>
 
 <br><br>
 <h2 id="abstract">1. Abstract<a name="abstract"></a></h2>
-<p> Speaker adaptation in text-to-speech synthesis (TTS) is to finetune a pre-trained TTS model to adapt to new target speakers with limited data. While much effort has been conducted towards this task, seldom work has been performed for low computational resource scenarios. In this paper, a tiny VITS-based TTS model, named AdaVITS, for low computing resource speaker adaptation is proposed. To effectively reduce parameters and computational complexity, an iSTFT-based decoder is particularly proposed. Besides, sharing the density estimate across flow blocks and replacing linear attention with scaled-dot attention are introduced to reduce the parameters and computational complexity. To deal with the instability caused by the simplified model, phonetic posteriorgram (PPG) is utilized as linguistic feature via a text-to-PPG module. Experiment shows that AdaVITS can generate stable and natural speech in speaker adaptation with 8.97M model parameters and 0.72GFlops computational complexity.
-</p>
+In current two-stage neural text-to-speech (TTS) paradigm, it is ideal to have a universal neural vocoder, once trained, which is robust to imperfect mel-spectrogram predicted from the acoustic model To this end, we propose Robust MelGAN vocoder by solving the original multi-band MelGAN's metallic sound problem and increasing its generalization ability. Specifically, we introduce a fine-grained network dropout strategy to the generator. With a specifically designed over-smooth handler which separates speech signal intro periodic and aperiodic components, we only perform network dropout to the aperodic components, which alleviates metallic sounding and maintains good speaker similarity. To further improve generalization ability, we introduce several data augmentation methods to augment fake data in the discriminator, including harmonic shift, harmonic noise and phase noise. Experiments show that Robust MelGAN can be used as a universal vocoder, significantly improving sound quality in TTS systems built on various types of data.</p>
 	<center><img src='raw/fig/model.png'></center>
+  <!-- <center><img src='raw/fig/augment.png'></center> -->
   <!-- <center><img src='raw/fig/decoder.png'></center> -->
 <br><br>
 
-<h2>2. Demos on VCTK<a name="Comparison"></a></h2>
-<p>Use the pre-trained model trains on LibriTTS. For speaker adaptation, 20 utterances are randomly selected for each speaker.</p>
+<h2>2. Demos on Spon data (TTS).<a name="Comparison_1"></a></h2>
+<p>Spon data is a studio-recorded conversation dataset which comprises a male speaker and a female speaker, each with 8,000 utterances. The dataset contains expressive conversational speech with fast talking, different emotions, breaths and even smiles.</p>
+
+<p>Speakers: </p>
 <table>
   <thead>
-    <tr>
-      <th style="text-align: center"><strong>speaker</strong></th>
-      <th style="text-align: center"><strong>Record</strong></th>
-      <th style="text-align: center"><strong>AdaVITS v1</strong></th>
-      <th style="text-align: center"><strong>AdaVITS v2</strong></th>
-      <th style="text-align: center"><strong>AdaVITS-e</strong></th>
-      <th style="text-align: center"><strong>FS2-o+hifiganv1</strong></th>
-      <th style="text-align: center"><strong>FS2-l+hifiganv2</strong></th>
-      <th style="text-align: center"><strong>VITS</strong></th>
-    </tr>
+  <tr>
+    <th style="text-align: center"><strong>male</strong></th>
+    <th style="text-align: center"><strong>female</strong></th>
+  </tr>
   </thead>
   <tbody>
-	<tr>
     <tr>
-	  <td style="text-align: left" rowspan=2>p225</td>
-
-    </tr>
-    <td style="text-align: left" colspan=6>
-
-      Text: She can scoop these things into three red bags, and we will go meet her Wednesday at the train station.</td>
-
-	</tr>
-    <tr>
-      <td style="text-align: left"><audio src="raw/wav/ref1/p225_005.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/record/p225_005.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/adaVITS/p225_005.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p225_005.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p225_005.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/fso/p225_005.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/fsl/p225_005.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/vits/p225_005.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p225</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: The rainbow is a division of white light into many beautiful colors.</td>
-    </tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p225_007.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p225_007.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p225_007.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p225_007.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p225_007.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p225_007.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p225_007.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p225_007.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p227</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: Movement has to take place.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p227_026.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p227_026.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p227_026.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p227_026.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p227_026.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p227_026.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p227_026.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p227_026.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p227</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: However, there is an issue, isn't there ?</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p227_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p227_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p227_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p227_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p227_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p227_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p227_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p227_400.wav" controls="" preload=""></audio></td>
-    </tr>
-   <tr>
-    <tr>
-      <td style="text-align: left" rowspan=2>p228</td>
-
-      </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: I am just trying to do my job.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p228_154.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p228_154.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p228_154.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p228_154.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p228_154.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p228_154.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p228_154.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p228_154.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p228</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: The workers do not want to read about their futures in newspapers.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p228_223.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p228_223.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p228_223.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p228_223.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p228_223.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p228_223.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p228_223.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p228_223.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p230</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: They can leave at any time.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p230_281.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p230_281.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p230_281.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p230_281.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p230_281.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p230_281.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p230_281.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p230_281.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p230</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: We think all other measures are not exhausted.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p230_347.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p230_347.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p230_347.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p230_347.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p230_347.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p230_347.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p230_347.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p230_347.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p231</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: The rate of growth in road traffic is already beginning to slow.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p231_065.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p231_065.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p231_065.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p231_065.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p231_065.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p231_065.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p231_065.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p231_065.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p231</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: Neither side would reveal the details of the offer.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p231_193.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p231_193.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p231_193.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p231_193.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p231_193.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p231_193.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p231_193.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p231_193.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p232</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: Many complicated ideas about the rainbow have been formed. </td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p232_020.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p232_020.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p232_020.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p232_020.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p232_020.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p232_020.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p232_020.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p232_020.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p232</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: Finally, he paid for the movie.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p232_279.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p232_279.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p232_279.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p232_279.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p232_279.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p232_279.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p232_279.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p232_279.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p233</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: Of course, we will need to strengthen the squad for Europe.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p233_161.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p233_161.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p233_161.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p233_161.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p233_161.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p233_161.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p233_161.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p233_161.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p233</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: Nobody else was with me.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p233_338.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p233_338.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p233_338.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p233_338.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p233_338.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p233_338.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p233_338.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p233_338.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p243</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: They always want to give a performance.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p243_269.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p243_269.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p243_269.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p243_269.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p243_269.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p243_269.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p243_269.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p243_269.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p243</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: The fans pay for their season tickets.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p243_284.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p243_284.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p243_284.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p243_284.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p243_284.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p243_284.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p243_284.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p243_284.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p254</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: My mother is a widow.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p254_069.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p254_069.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p254_069.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p254_069.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p254_069.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p254_069.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p254_069.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p254_069.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p254</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: It was a breathtaking moment.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p254_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p254_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p254_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p254_400.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p254_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p254_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p254_400.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p254_400.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p256</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: Her home is perhaps a couple of miles from the town centre.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p256_134.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p256_134.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p256_134.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p256_134.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p256_134.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p256_134.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p256_134.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p256_134.wav" controls="" preload=""></audio></td>
-    </tr>
-    <tr>
-      <tr>
-        <td style="text-align: left" rowspan=2>p256</td>
-
-        </tr>
-      <td style="text-align: left" colspan=6>
-
-        Text: Chelsea was a great club.</td>
-	</tr>
-	<tr>
-    <td style="text-align: left"><audio src="raw/wav/ref1/p256_257.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/record/p256_257.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS/p256_257.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-v2/p256_257.wav" controls="" preload=""></audio></td>
-
-    <td style="text-align: left"><audio src="raw/wav/adaVITS-e/p256_257.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fso/p256_257.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/fsl/p256_257.wav" controls="" preload=""></audio></td>
-    <td style="text-align: left"><audio src="raw/wav/vits/p256_257.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/ref/spon/M8312014586.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/ref/spon/F0312004675.wav" controls="" preload=""></audio></td>
     </tr>
   </tbody>
+
 </table>
-<p><b>Short summary:</b> The proposed AdaVITS achieves better naturalness and less computational complexity with FS2-l+hifiganv2. Although it is a gap with VITS/FS2-o+hifiganv1, it has better pronunciation stability and less parameter and computational complexity. The result is shown in the table below.</p>
-<center><img src='raw/fig/result.png'></center>
-
-
-<h2>3. Demos on Chinese<a name="Comparison_chinese"></a></h2>
-<!-- <h3>Corresponding to section 3.2 in our paper, below lists the samples that are synthesized for evaluations on the ability to generate the desired speaking style and timbre. We compared our proposed method with the Multi-R and PB on style similarity and speaker similarity.</h3> -->
-<p>Use the pre-trained model trains on closed source dataset. For speaker adaptation, 20 utterances are randomly selected for each speaker.</p>
-
-<h3>3.1 Demos on open source dataset: Blizzard Challenge 2019</h3>
+<p>Demos: </p>
 <table>
   <thead>
     <tr>
       <th style="text-align: center"><strong>speaker</strong></th>
-
-      <th style="text-align: center" colspan=5><strong>proposed</strong></th>
-
+      <th style="text-align: center"><strong>multi-band MelGAN</strong></th>
+      <th style="text-align: center"><strong>Robust MelGAN</strong></th>
+      <th style="text-align: center"><strong>- over-smooth handler</strong></th>
+      <th style="text-align: center"><strong>- data augmentation</strong></th>
     </tr>
   </thead>
   <tbody>
 
     <tr>
-      <td style="text-align: left"><audio src="raw/wav/chinese/lzy/ref.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/lzy/output.wav" controls="" preload=""></audio></td>
-
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/A22.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/A22.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/A22.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/A22.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/A26.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/A26.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/A26.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/A26.wav" controls="" preload=""></audio></td>
     </tr>
 
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/B05.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/B05.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/B05.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/B05.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/B07.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/B07.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/B07.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/B07.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/B19.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/B19.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/B19.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/B19.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/06A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/06A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/06A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/06A.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/12A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/12A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/12A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/12A.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/14A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/14A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/14A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/14A.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/15B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/15B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/15B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/15B.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/melgan/22A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/robustmelgan/22A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_1/22A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/spon/ablation_2/22A.wav" controls="" preload=""></audio></td>
+    </tr>
 
   </tbody>
 </table>
 
-<h3>3.2 Demos on closed source dataset</h3>
+<h2>3. Demos on speaker adaptation (TTS).<a name="Comparison_2"></a></h2>
+<p>We use 3 male and 2 female speakers, each with 50 utterances recorded in a typical office room, to fine- tune the base model for low resource speaker adaption.</p>
+<p>Speakers: </p>
+<table>
+  <thead>
+  <tr>
+    <th style="text-align: center"><strong>spk1</strong></th>
+    <th style="text-align: center"><strong>spk2</strong></th>
+    <th style="text-align: center"><strong>spk3</strong></th>
+    <th style="text-align: center"><strong>spk4</strong></th>
+    <th style="text-align: center"><strong>spk5</strong></th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/ref/adapt/sy_10.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/ref/adapt/ycy_35.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/ref/adapt/xlei_20.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/ref/adapt/nmx_30.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/ref/adapt/gcx_8.wav" controls="" preload=""></audio></td>
+
+    </tr>
+  </tbody>
+
+</table>
+<p>Demos: </p>
+
 <table>
   <thead>
     <tr>
-      <th style="text-align: center"><strong>speaker</strong></th>
-
-      <th style="text-align: center" colspan=5><strong>proposed</strong></th>
-
+      <td style="text-align: left"><p>speaker</p></td>
+      <th style="text-align: center"><strong>multi-band MelGAN</strong></th>
+      <th style="text-align: center"><strong>Robust MelGAN</strong></th>
+      <th style="text-align: center"><strong>- over-smooth handler</strong></th>
+      <th style="text-align: center"><strong>- data augmentation</strong></th>
     </tr>
   </thead>
   <tbody>
 
     <tr>
-      <td style="text-align: left"><audio src="raw/wav/chinese/guoshuangshuang/ref.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/guoshuangshuang/CF-002_hb_sub_032.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/guoshuangshuang/CF-002_hb_sub_092.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/guoshuangshuang/CF-002_hb_sub_165.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/guoshuangshuang/CF-002_hb_sub_195.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/guoshuangshuang/CF-002_hb_sub_206.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><p>spk1</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/sy_spk_0_102_200.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/sy_spk_0_102_200.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/sy_spk_0_102_200.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/sy_spk_0_102_200.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><p>spk1</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/sy_spk_0_95_186.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/sy_spk_0_95_186.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/sy_spk_0_95_186.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/sy_spk_0_95_186.wav" controls="" preload=""></audio></td>
     </tr>
 
     <tr>
-      <td style="text-align: left"><audio src="raw/wav/chinese/fuguiping/ref.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/fuguiping/CF-002_hb_sub_032.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/fuguiping/CF-002_hb_sub_092.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/fuguiping/CF-002_hb_sub_165.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/fuguiping/CF-002_hb_sub_195.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/fuguiping/CF-002_hb_sub_206.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><p>spk2</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/ycy_spk_0_26_48.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/ycy_spk_0_26_48.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/ycy_spk_0_26_48.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/ycy_spk_0_26_48.wav" controls="" preload=""></audio></td>
     </tr>
 
     <tr>
-      <td style="text-align: left"><audio src="raw/wav/chinese/baiyuxuan/ref.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/baiyuxuan/CF-002_hb_sub_032.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/baiyuxuan/CF-002_hb_sub_092.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/baiyuxuan/CF-002_hb_sub_165.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/baiyuxuan/CF-002_hb_sub_195.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/baiyuxuan/CF-002_hb_sub_206.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><p>spk2</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/ycy_spk_0_32_60.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/ycy_spk_0_32_60.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/ycy_spk_0_32_60.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/ycy_spk_0_32_60.wav" controls="" preload=""></audio></td>
     </tr>
 
     <tr>
-      <td style="text-align: left"><audio src="raw/wav/chinese/jinxiaoai/ref.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/jinxiaoai/hb_sub_032.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/jinxiaoai/hb_sub_092.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/jinxiaoai/hb_sub_165.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/jinxiaoai/hb_sub_195.wav" controls="" preload=""></audio></td>
-      <td style="text-align: left"><audio src="raw/wav/chinese/jinxiaoai/hb_sub_206.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><p>spk3</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/xlei_spk_0_80_156.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/xlei_spk_0_80_156.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/xlei_spk_0_80_156.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/xlei_spk_0_80_156.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>spk3</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/xlei_spk_0_92_180.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/xlei_spk_0_92_180.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/xlei_spk_0_92_180.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/xlei_spk_0_92_180.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><p>spk4</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/nmx_103sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/nmx_103sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/nmx_103sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/nmx_103sample.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>spk4</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/nmx_50sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/nmx_50sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/nmx_50sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/nmx_50sample.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>spk5</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/gcx_4sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/gcx_4sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/gcx_4sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/gcx_4sample.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>spk5</p></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/melgan/gcx_89sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/robustmelgan/gcx_89sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/gcx_89sample.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/adapt/ablation_1/gcx_89sample.wav" controls="" preload=""></audio></td>
     </tr>
 
   </tbody>
 </table>
 
+<h2>4. Demos on Hifi data (TTS).<a name="Comparison_3"></a></h2>
+<p>Hifi data is a high-fidelity dataset consisting of a male speaker and a female speaker with typical reading style, each with 5,000 utterances.</p>
+<p>Speakers: </p>
+<table>
+  <thead>
+  <tr>
+    <th style="text-align: center"><strong>male</strong></th>
+    <th style="text-align: center"><strong>female</strong></th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/ref/hifi/male.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/ref/hifi/female.wav" controls="" preload=""></audio></td>
+    </tr>
+  </tbody>
 
+</table>
+<p>Demos: </p>
+
+<table>
+  <thead>
+    <tr>
+      <td style="text-align: left"><p>speaker</p></td>
+      <th style="text-align: center"><strong>multi-band MelGAN</strong></th>
+      <th style="text-align: center"><strong>Robust MelGAN</strong></th>
+      <th style="text-align: center"><strong>- over-smooth handler</strong></th>
+      <th style="text-align: center"><strong>- data augmentation</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/00_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/00_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/00_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/00_enone_d0.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/11_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/11_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/11_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/11_enone_d0.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/21_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/21_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/21_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/21_enone_d0.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/41_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/41_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/41_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/41_enone_d0.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>male</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan//46_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/46_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/46_enone_d0.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/46_enone_d0.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/05B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/05B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/05B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/05B.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/06A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/06A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/06A.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/06A.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/13B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/13B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/13B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/13B.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/15B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/15B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/15B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/15B.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><p>female</p></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/melgan/23B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/robustmelgan/23B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_1/23B.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/hifi/ablation_2/23B.wav" controls="" preload=""></audio></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<h2>5. Demos on unseen speakers (copy synthesis).<a name="Comparison_4"></a></h2>
+<p>We use multi-speaker Mandarin dataset AISHELL-3 as the unseen speakers, from which we randomly selected 50 utterances of 10 speakers for copysyn test.</p>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"><strong>Recording</strong></th>
+      <th style="text-align: center"><strong>multi-band MelGAN</strong></th>
+      <th style="text-align: center"><strong>Robust MelGAN</strong></th>
+      <th style="text-align: center"><strong>- over-smooth handler</strong></th>
+      <th style="text-align: center"><strong>- data augmentation</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB0038_SSB00380169.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB0038_SSB00380169.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB0038_SSB00380169.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB0038_SSB00380169.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB0038_SSB00380169.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB0139_SSB01390048.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB0139_SSB01390048.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB0139_SSB01390048.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB0139_SSB01390048.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB0139_SSB01390048.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB0342_SSB03420329.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB0342_SSB03420329.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB0342_SSB03420329.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB0342_SSB03420329.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB0342_SSB03420329.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB0599_SSB05990282.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB0599_SSB05990282.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB0599_SSB05990282.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB0599_SSB05990282.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB0599_SSB05990282.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB0749_SSB07490448.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB0749_SSB07490448.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB0749_SSB07490448.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB0749_SSB07490448.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB0749_SSB07490448.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB1050_SSB10500502.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB1050_SSB10500502.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB1050_SSB10500502.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB1050_SSB10500502.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB1050_SSB10500502.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB1253_SSB12530096.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB1253_SSB12530096.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB1253_SSB12530096.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB1253_SSB12530096.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB1253_SSB12530096.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB1555_SSB15550446.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB1555_SSB15550446.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB1555_SSB15550446.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB15" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB1555_SSB15550446.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB1745_SSB17450401.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB1745_SSB17450401.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB1745_SSB17450401.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB1745_SSB17450401.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB1745_SSB17450401.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/unseen/recording/SSB1872_SSB18720137.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/melgan/SSB1872_SSB18720137.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/robustmelgan/SSB1872_SSB18720137.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_1/SSB1872_SSB18720137.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/unseen/ablation_2/SSB1872_SSB18720137.wav" controls="" preload=""></audio></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<h2>6. Demos on seen speakers (copy synthesis).<a name="Comparison_5"></a></h2>
+<p>We reserve 50 utter- ances of 10 speakers randomly selected from the training data as the seen speakers.</p>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"><strong>Recording</strong></th>
+      <th style="text-align: center"><strong>multi-band MelGAN</strong></th>
+      <th style="text-align: center"><strong>Robust MelGAN</strong></th>
+      <th style="text-align: center"><strong>- over-smooth handler</strong></th>
+      <th style="text-align: center"><strong>- data augmentation</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/db14_cn_001073.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/db14_cn_001073.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/db14_cn_001073.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/db14_cn_001073.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/db14_cn_001073.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/db6_emotion_fear_250403.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/db6_emotion_fear_250403.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/db6_emotion_fear_250403.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/db6_emotion_fear_250403.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/db6_emotion_fear_250403.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/db6_neutral_cn_002102.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/db6_neutral_cn_002102.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/db6_neutral_cn_002102.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/db6_neutral_cn_002102.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/db6_neutral_cn_002102.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/db_3_db-3_030301.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/db_3_db-3_030301.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/db_3_db-3_030301.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/db_3_db-3_030301.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/db_3_db-3_030301.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/db_4_male_raw_009120.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/db_4_male_raw_009120.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/db_4_male_raw_009120.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/db_4_male_raw_009120.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/db_4_male_raw_009120.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/db_5_cn_raw_010359.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/db_5_cn_raw_010359.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/db_5_cn_raw_010359.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/db_5_cn_raw_010359.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/db_5_cn_raw_010359.wav" controls="" preload=""></audio></td>
+    </tr>
+ 
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/hisi_en_raw_000336.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/hisi_en_raw_000336.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/hisi_en_raw_000336.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/hisi_en_raw_000336.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/hisi_en_raw_000336.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/shannon_real_child_neutral_raw_102711.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/shannon_real_child_neutral_raw_102711.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/shannon_real_child_neutral_raw_102711.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/shannon_real_child_neutral_raw_102711.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/shannon_real_child_neutral_raw_102711.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <td style="text-align: left"><audio src="raw/wav/seen/recording/tianjin-tts_raw_001660.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/melgan/tianjin-tts_raw_001660.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/tianjin-tts_raw_001660.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/tianjin-tts_raw_001660.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/tianjin-tts_raw_001660.wav" controls="" preload=""></audio></td>
+    </tr>
+
+    <tr>
+      <tr>
+        <td style="text-align: left"><audio src="raw/wav/seen/recording/db6_emotion_fear_251615.wav" controls="" preload=""></audio></td>
+        <td style="text-align: left"><audio src="raw/wav/seen/melgan/db6_emotion_fear_251615.wav" controls="" preload=""></audio></td>
+        <td style="text-align: left"><audio src="raw/wav/seen/robustmelgan/db6_emotion_fear_251615.wav" controls="" preload=""></audio></td>
+        <td style="text-align: left"><audio src="raw/wav/seen/ablation_1/db6_emotion_fear_251615.wav" controls="" preload=""></audio></td>
+        <td style="text-align: left"><audio src="raw/wav/seen/ablation_2/db6_emotion_fear_251615.wav" controls="" preload=""></audio></td>
+    </tr>
+
+  </tbody>
+</table>
 
       <footer class="site-footer">
 
